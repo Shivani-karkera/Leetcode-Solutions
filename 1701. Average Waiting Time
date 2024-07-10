@@ -1,0 +1,18 @@
+class Solution {
+    public double averageWaitingTime(int[][] customers) {
+        int noOfcus = customers.length;
+        int cookTime = customers[0][0];
+        double totalWaitTime = 0;
+        for (int i = 0; i < noOfcus; i++) {
+            int arrivalTime = customers[i][0];
+            int waitTime = customers[i][1];
+            if (arrivalTime > cookTime) {
+                cookTime = waitTime + arrivalTime;
+            } else
+                cookTime += waitTime;
+            totalWaitTime += cookTime - arrivalTime;
+        }
+
+        return totalWaitTime / noOfcus;
+    }
+}
