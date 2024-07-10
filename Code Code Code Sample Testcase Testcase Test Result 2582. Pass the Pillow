@@ -1,0 +1,17 @@
+class Solution {
+    public int passThePillow(int n, int time) {
+        if (n > time)
+            return time + 1;
+        int noOfIterations = time / (n - 1); 
+        int position = time % (n - 1); 
+        if (noOfIterations % 2 == 0) // forwards
+            return position + 1;
+        else // backwards
+            return n - (position);
+
+    }
+}
+
+/// eg: n=5 t=10 
+divide it to n-1 cycles
+1 2 3 4 | 5 4 3 2 | 1 2 3
