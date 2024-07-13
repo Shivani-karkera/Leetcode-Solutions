@@ -1,0 +1,65 @@
+class Robots {
+    public int position;
+    public int health;
+    public char direction;
+    public int index;
+
+    public Robots(int position,
+            int health,
+            char direction,
+            int index) {
+        this.position = position;
+        this.health = health;
+        this.direction = direction;
+        this.index = index;
+    }
+}
+
+class Solution {
+    public List<Integer> survivedRobotsHealths(int[] positions, int[] healths, String directions) {
+        char[] dir = directions.toCharArray();
+        int length = positions.length;
+        List<Robots> robots = new ArrayList<Robots>();
+
+        // creating list for robots
+        for (int i = 0; i < length; i++) {
+            robots.add(new Robots(positions[i], healths[i],
+                    dir[i], i));
+        }
+
+        // sorting based on the position
+        robots.sort(Comparator.comparingInt(robot -> robot.position));
+
+        Stack<Robots> stack = new Stack<>();
+        for (Robots robot : robots) {
+            //iterate through list
+            while (!stack.isEmpty() && robot.direction == 'L' && stack.peek().direction == 'R') {
+                Robots prevRobot = stack.pop();
+                if (robot.health == prevRobot.health) {
+                    robot.health = 0;
+                    break;
+                } else if (robot.health > prevRobot.health) {
+                    robot.health--;
+
+                } else {
+                    robot.health = 0;
+                    prevRobot.health--;
+                    stack.push(prevRobot);
+                    break;
+                }
+            }
+            if (robot.health > 0) {
+                stack.push(robot);
+            }
+        }
+
+        List<Integer> res = new ArrayList<>();
+        stack.sort(Comparator.comparingInt(robot -> robot.index));
+        for (Robots i : stack) {
+                res.add(i.health);
+        }
+
+        return res;
+
+    }
+}
