@@ -1,0 +1,80 @@
+import java.util.Collections;
+
+class Solution {
+    public String countOfAtoms(String formula) {
+
+        Stack<Map<String, Integer>> stack = new Stack<>();
+        Map<String, Integer> currentMap = new HashMap<>();
+        int n = formula.length();
+        int i = 0;
+
+        while (i < n) {
+            char c = formula.charAt(i);
+
+            if (c == '(') {
+
+                stack.push(currentMap);
+                currentMap = new HashMap<>();
+                i++;
+
+            } else if (c == ')') {
+                i++;
+                int start = i;
+                while (i < n && Character.isDigit(formula.charAt(i))) {
+                    i++;
+                }
+                // if(start<i)
+                int count = (start < i) ? Integer.parseInt(formula.substring(start, i)) : 1;
+
+                for (String ele : currentMap.keySet()) {
+                    currentMap.put(ele, currentMap.get(ele) * count);
+                }
+
+                // merge
+                if (!stack.isEmpty()) {
+                    Map<String, Integer> inStack = new HashMap<String, Integer>();
+                    inStack = stack.pop();
+                    for (String ele : inStack.keySet()) {
+                        currentMap.put(ele, currentMap.getOrDefault(ele, 0) + inStack.get(ele));
+                    }
+                }
+
+            } else if (i < n && Character.isUpperCase(formula.charAt(i))) {
+                int start = i++;
+                int count = 1;
+
+                while (i < n && Character.isLowerCase(formula.charAt(i))) {
+                    i++;
+
+                }
+                String ele = formula.substring(start, i);
+
+                start = i;
+                while (i < n && Character.isDigit(formula.charAt(i))) {
+                    i++;
+                }
+                if (start < i)
+                    count = Integer.parseInt(formula.substring(start, i));
+                currentMap.put(ele, currentMap.getOrDefault(ele, 0) + count);
+
+            }
+
+        }
+
+        System.out.println(currentMap);
+
+        StringBuilder res = new StringBuilder();
+        List<String> sortedMap = new ArrayList<String>(currentMap.keySet());
+        Collections.sort(sortedMap);
+
+        for (String ele : sortedMap) {
+            res.append(ele);
+            if (currentMap.get(ele) > 1)
+                res.append(currentMap.get(ele));
+
+        }
+
+        return res.toString();
+
+    }
+}
