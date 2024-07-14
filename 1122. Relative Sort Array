@@ -1,0 +1,44 @@
+class Solution {
+    public int[] relativeSortArray(int[] arr1, int[] arr2) {
+        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+        int res[] = new int[arr1.length];
+
+        int index = 0;
+//frequency map
+        for (int i = 0; i < arr1.length; i++) {
+            map.put(arr1[i], map.getOrDefault(arr1[i], 0) + 1);
+        }
+
+//add arr2 to res
+        for (int i = 0; i < arr2.length; i++) {
+            while (map.get(arr2[i]) > 0) {
+                res[index++] = arr2[i];
+                map.put(arr2[i], map.get(arr2[i]) - 1);
+            }
+            map.remove(arr2[i]);
+        }
+
+//remaining elements list
+        List<Integer> list = new ArrayList<>();
+        for (int i : arr1) {
+            if (map.containsKey(i)) {
+                while (map.get(i) > 0) {
+                    list.add(i);
+                    map.put(i, map.get(i) - 1);
+                }
+                map.remove(i);
+            }
+        }
+//sort
+        Collections.sort(list);
+//add remaining to res
+        for (int key : list) {
+            if (index < arr1.length) {
+                res[index++] = key;
+            }
+        }
+
+        return res;
+    }
+
+}
