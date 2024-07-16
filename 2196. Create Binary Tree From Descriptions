@@ -1,0 +1,52 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ * int val;
+ * TreeNode left;
+ * TreeNode right;
+ * TreeNode() {}
+ * TreeNode(int val) { this.val = val; }
+ * TreeNode(int val, TreeNode left, TreeNode right) {
+ * this.val = val;
+ * this.left = left;
+ * this.right = right;
+ * }
+ * }
+ */
+class Solution {
+    public TreeNode createBinaryTree(int[][] descriptions) {
+        HashMap<Integer, TreeNode> map = new HashMap<Integer, TreeNode>();
+        Set<Integer> set = new HashSet<>();
+        for (int[] a : descriptions) {
+            int parent = a[0];
+            int child = a[1];
+            TreeNode parentObj = map.getOrDefault(parent, new TreeNode(parent));
+
+            set.add(child);
+            if (a[2] == 1) {
+                parentObj.left = map.getOrDefault(child, new TreeNode(child));
+                map.put(child, parentObj.left);
+            }
+
+            else {
+                parentObj.right = map.getOrDefault(child, new TreeNode(child));
+                map.put(child, parentObj.right);
+            }
+
+            map.put(parent, parentObj);
+
+        }
+
+        int root = -1;
+        for (int[] i : descriptions) {
+            if (!set.contains(i[0])) {
+                root = i[0];
+                break;
+            }
+
+        }
+
+        return map.getOrDefault(root, null);
+    }
+
+}
