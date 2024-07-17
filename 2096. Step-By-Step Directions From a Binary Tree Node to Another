@@ -1,0 +1,56 @@
+class Solution {
+    public String getDirections(TreeNode root, int startValue, int destValue) {
+
+        TreeNode lca = lca(root, startValue, destValue);
+        StringBuilder RootToStart = new StringBuilder();
+        StringBuilder RootToDes = new StringBuilder();
+        StringBuilder res = new StringBuilder();
+        findPath(lca, startValue, RootToStart);
+        findPath(lca, destValue, RootToDes);
+        int count = 0;
+
+        while (count < RootToStart.length()) {
+            res.append("U");
+            count++;
+        }
+
+        res.append(RootToDes);
+
+        return res.toString();
+    }
+
+    public TreeNode lca(TreeNode root, int a, int b) {
+        if (root == null || root.val == a || root.val == b)
+            return root;
+
+        TreeNode left = lca(root.left, a, b);
+        TreeNode right = lca(root.right, a, b);
+
+        if (left == null)
+            return right;
+        else if (right == null)
+            return left;
+        else
+            return root;
+    }
+
+    public boolean findPath(TreeNode root, int startValue, StringBuilder s) {
+        if (root == null)
+            return false;
+
+        if (root.val == startValue)
+            return true;
+
+        s.append("L");
+        if (findPath(root.left, startValue, s))
+            return true;
+        s.setLength(s.length() - 1);
+
+        s.append("R");
+        if (findPath(root.right, startValue, s))
+            return true;
+        s.setLength(s.length() - 1);
+
+        return false;
+    }
+}
