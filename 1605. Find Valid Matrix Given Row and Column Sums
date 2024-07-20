@@ -1,0 +1,16 @@
+///Find the smallest rowSum or colSum, and let it be x. Place that number in the grid, and subtract x from rowSum and colSum. Continue until all the sums are satisfied.
+
+class Solution {
+    public int[][] restoreMatrix(int[] rowSum, int[] colSum) {
+        int[][] ans = new int[rowSum.length][colSum.length];
+
+        for (int i = 0; i < rowSum.length; i++) {
+            for (int j = 0; j < colSum.length; j++) {
+                ans[i][j]=Math.min(rowSum[i],colSum[j]);
+                rowSum[i]-=ans[i][j];
+                colSum[j]-=ans[i][j];
+            }
+        }
+        return ans;
+    }
+}
