@@ -1,0 +1,50 @@
+class Solution {
+    public List<Integer> majorityElement(int[] nums) {
+        List<Integer> res = new ArrayList<Integer>();
+        int n = nums.length;
+        int count1 = 0;
+        int curr = Integer.MIN_VALUE;
+        int next = Integer.MIN_VALUE;
+        int count2 = 0;
+
+        for (int i = 0; i < n; i++) {
+
+            if (count2 == 0 && curr != nums[i]) {
+                next = nums[i];
+                count2++;
+            }
+
+            else if (count1 == 0 && next != nums[i]) {
+                curr = nums[i];
+                count1++;
+            } else if (nums[i] == curr)
+                count1++;
+            else if (nums[i] == next)
+                count2++;
+            else {
+                count2--;
+                count1--;
+            }
+
+        }
+
+///check
+        int cnt1 = 0;
+        int cnt2 = 0;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] == curr)
+                cnt1++;
+            if (nums[i] == next)
+                cnt2++;
+        }
+
+
+        int min = (n / 3) + 1;
+        if (cnt1 >= min)
+            res.add(curr);
+        if (cnt2 >= min)
+            res.add(next);
+        return res;
+
+    }
+}
